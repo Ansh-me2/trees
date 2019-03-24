@@ -17,3 +17,54 @@ struct node* NewNode(int new_data)
 	temp->left = temp->right = NULL;
 	return temp;
 }
+struct node* insert_level_order(vector<int> arr, struct node *root,int i, int n)
+{
+	if(i < n)
+	{
+		struct node *temp;
+		if(!temp)
+		{
+			cout << "\nOut of Memory";
+			exit(1);
+		}
+		temp = NewNode(arr[i]);
+		root = temp;
+
+		root->left = insert_level_order(arr, root->left, 2*i+1, n);
+		root->right = insert_level_order(arr, root->right, 2*i+2, n);
+	}
+	return root;
+}
+
+void InOrder(struct node *root)
+{
+	if(root)
+	{
+		InOrder(root->left);
+		cout << root->data <<" ";
+		InOrder(root->right);
+	}
+	return;
+}
+
+void PreOrder(struct node *root)
+{
+	if(root)
+	{
+		cout << root->data << " ";
+		PreOrder(root->left);
+		PreOrder(root->right);
+	}
+	return;
+}
+
+void PostOrder(struct node *root)
+{
+	if(root)
+	{
+		PostOrder(root->left);
+		PostOrder(root->right);
+		cout << root->data <<" ";
+	}
+	return;
+}
