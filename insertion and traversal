@@ -1,0 +1,19 @@
+#include<iostream>
+#include<stdio.h>
+#include<queue>
+#include<vector>
+
+using namespace std;
+struct node
+{
+	int data;
+	struct node *left,*right;
+};
+
+struct node* NewNode(int new_data)
+{
+	struct node* temp = new node;
+	temp->data = new_data;
+	temp->left = temp->right = NULL;
+	return temp;
+}
