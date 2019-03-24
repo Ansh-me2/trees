@@ -68,3 +68,111 @@ void PostOrder(struct node *root)
 	}
 	return;
 }
+
+int FindMax(struct node *root)
+{
+	int leftValue,rightValue,rootValue,max = INT8_MIN;
+	if(root)
+	{
+		rootValue = root->data;
+		leftValue = FindMax(root->left);
+		rightValue = FindMax(root->right);
+		if(leftValue > rightValue)
+			max = leftValue;
+		else
+			max = rightValue;
+		if(rootValue > max)
+			max = rootValue;
+	}
+	return max;
+}
+
+int FindMin_LevelOrder(struct node *root)
+{
+	struct node *temp;
+	queue<struct node*> q;
+	int min = INT8_MAX;
+	q.push(root);
+	while(!q.empty())
+	{
+		temp = q.front();
+		q.pop();
+		if(temp->data < min)
+			min = temp->data;
+		if(temp->left)
+			q.push(temp->left);
+		if(temp->right)
+			q.push(temp->right);
+	}
+	q.pop();
+	return min;
+}
+
+bool search(struct node *root, int key)
+{
+	int temp;
+	if (!root)
+		return false;
+	if(root->data == key)
+		return true;
+	return (search(root->left,key) || search(root->right,key));
+}
+
+void InsertLevelOrder(struct node *root, int key)
+{
+	if(!root)
+	{
+		root->data = key;
+		root->left = root->right = NULL;
+		return;
+	}
+	struct node *temp;
+	struct node* toInsert = NewNode(key);
+	queue<struct node*> q;
+	q.push(root);
+	while(!q.empty())
+	{
+		temp = q.front();
+		q.pop();
+		if(temp->left)
+			q.push(temp->left);
+		else
+		{
+			temp->left = toInsert;
+			q.pop();
+			return;
+		}
+	}
+}
+
+int main()
+{
+	vector<int> v;
+	int n,num, key;
+	struct node *root;
+	cout << "Enter total number of nodes ";
+	cin >> n;
+	for(int i = 0; i < n; i++)
+	{
+		cout << "Enter the number : ";
+		cin >> num;
+		v.push_back(num);
+	}
+	root = insert_level_order(v, root, 0, n);
+	int max = FindMax(root);
+	cout << "The max value in the tree is " << max <<endl;
+	/*cout << "\nPreOrder : "; PreOrder(root);
+	cout << "\nInOrder : "; InOrder(root);
+	cout << "\nPostOrder : "; PostOrder(root);*/
+	int min = FindMin_LevelOrder(root);
+	cout << "The min value in the tree is " << min << endl;
+
+	cout << "Enter the number to be searched ";
+	cin >> key;
+	bool found = search(root, key);
+	if(found)
+		cout << "Element found in the tree" << endl;
+	else
+		cout << "Element not found in the tree" << endl;
+	return 0;
+}
